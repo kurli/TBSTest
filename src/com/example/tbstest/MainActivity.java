@@ -3,20 +3,20 @@ package com.example.tbstest;
 import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebViewClient;
+
 import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
 	
 	private WebView mWebView;
 	private ViewGroup mViewParent;
-	private static final String mHomeUrl =  "file:///android_asset/glesjs/index_glsl.html";
+	private static final String mHomeUrl =  "file:///android_asset/glesjs/index.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +54,17 @@ public class MainActivity extends Activity {
         WebView.setWebContentsDebuggingEnabled(true);
         webSettings.setAllowFileAccessFromFileURLs(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
-
+        webSettings.setDomStorageEnabled(true);
+        
 		mWebView.loadUrl(mHomeUrl);
 		CookieSyncManager.createInstance(this);
 		CookieSyncManager.getInstance().sync();
+        mWebView.setWebViewClient(new WebViewClient() {
+        	@Override
+            public boolean shouldOverrideUrlLoading(WebView wv, String url) {
+            	return false;
+            }
+        });
 
     }
 }
